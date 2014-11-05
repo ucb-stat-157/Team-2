@@ -1,0 +1,53 @@
+\documentclass[11pt]{article}
+\usepackage{hw}
+\usepackage{multicol}
+
+\def\title{Preliminary Proposal}
+\begin{document}
+\maketitle
+
+\section*{Features}
+\paragraph{}
+We propose using user demographics combined with the position of the ad and number of tokens to predict ad click-through rates (CTR). Rather than simply using a single feature from user profiles, we want to combine two features to get more informative and complex user groups. Often times, age alone is not a good indicator of a user's behavior and similarly, neither is gender alone. However, by creating a feature for different age/gender groups such as females between the ages of 13 and 17, we hope to create a better, more accurate predictor. \\
+
+\paragraph{}
+We suggest the following groups:
+\begin{multicols}{3}
+\begin{itemize}
+\item 12 and under female
+\item 12 and under male
+\item 13-18 female
+\item 13-18 male
+\item 19-24 female
+\item 19-24 male
+\item 25-30 female
+\item 25-30 male
+\item 31-40 female
+\item 31-40 male
+\item 40 and over female
+\item 40 and over male
+\end{itemize}
+\end{multicols}
+
+\paragraph{}
+We would also want to utilize the other features such as depth, position, number of shared tokens, etc. to help predict CTRs. To work with these categorical variables, we can convert them into binary fields where 0 would the variable fell in one category, and 1 if it fell in the other. Working with the binary vectors is much easier for us when we want to use statistical models. Then we will simply calculate the percentage of shared tokens between the query sent by the user and the advertisement, keyword of the ad. Moreover, we will also calculate the proportion of shared tokens within the title, description, and keyword of the ad, for an additional test. Combining these two will give us a good test for relevance.
+
+\paragraph{}
+We can create user features by going over the user data and grouping users into predetermined groups. We would also create our own data set corresponding to these binary vectors. We can use MapReduce to achieve these results quickly and efficiently.
+
+\section*{Models}
+\paragraph{}
+There are many statistical models available to us. The most familiar one that we would use is regression where we try to fit a curve into our given plotted data. We can also implement ranking models. Ranking models rank items, but in this case, given an observation where the user clicked and one where the user did not click, tries to rank the user click above the user no-click. In our models, we can try to maximize the area under the receiver operating characteristic, or ROC, which is equivalent to the probability that the binary classifier system correctly ranks a click and a no-click observation.
+
+\paragraph{}
+We would analyze the goodness of our models by calculating the area under the ROC. The higher, the better, since this corresponds to our classifier "correctly" ranking observations with "click" or "no click".
+
+\section*{Responsibilities}
+\paragraph{}
+We will do the planning together so we have a clear roadmap for the project. From there, we can probably split the work into a few different chunks: MapReduce for data preparation, data preparation for statistical models, setting up and calculating statistical models, analyzing results. Since these tasks must be executed synchronously due to their chained dependence, we may either decide to work together for the duration of the project or alternate parts and each member would wait on the other to finish their respective part.
+
+\section*{Most Challenging Part}
+\paragraph{}
+The most difficult part of this project will probably be planning the features to use and setting the data and models up. The analyzing of data should be much easier.
+
+\end{document}
