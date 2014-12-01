@@ -1,4 +1,6 @@
 from sklearn import tree
+from sklearn import svm
+import ml_metrics as metrics
 
 instances = [line.strip() for line in open('combined_data.txt')]
 
@@ -8,7 +10,7 @@ values = []
 for instance in instances:
     instance = instance.split('\t')
     # print instance
-    sample = [instance[12], instance[13]]
+    sample = [instance[12], instance[13], instance[6]]
     samples.append(sample)
 
     if instance[0] != '0':
@@ -17,38 +19,67 @@ for instance in instances:
         values.append(0)
 
 clf = tree.DecisionTreeClassifier()
-clf = clf.fit(samples, values)
+clf.fit(samples, values)
+
+clf2 = svm.SVC()
+clf2.fit(samples, values)
 
 tests = [line.strip() for line in open('combined_instances.txt')]
 
 right = 0
 total = 0
 
+right2 = 0
+
 clicks = []
 impressions = []
+depth = []
 ctrs = []
+
+clicks2 = []
+impressions2 = []
+depth2 = []
+ctrs2 = []
 
 for test in tests:
     test = test.split('\t')
 
-    sample = [test[12], test[13]]
+    sample = [test[12], test[13], test[6]]
     clicks.append(int(test[0]))
     impressions.append(int(test[1]))
-
+    depth.append(int(test[2]))
     val = clf.predict(sample)
-
     ctrs.append(float(val))
+
+    clicks2.append(int(test[0]))
+    impressions2.append(int(test[1]))
+    depth2.append(int(test[2]))
+    val2 = clf2.predict(sample)
+    ctrs2.append(float(val))
 
     if int(val[0]) == int(test[0]):
         if int(val[0]) == 1:
             print 'predicted click'
         right += 1
+
+    if int(val2[0]) == int(test[0]):
+        if int(val2[0]) == 1:
+            print 'predicted click'
+        right2 += 1
     # else:
     #     print 'predicted'
     #     print val[0]
     #     print 'actual'
     #     print test[0]
     total += 1
+
+print "countz"
+print right
+print right2
+
+
+
+print total
 
 # source: http://www.kddcup2012.org/c/kddcup2012-track2/forums/t/1776/understanding-the-auc
 def scoreClickAUC(num_clicks, num_impressions, predicted_ctr):
@@ -93,3 +124,19 @@ def scoreClickAUC(num_clicks, num_impressions, predicted_ctr):
     return auc
 
 print scoreClickAUC(clicks, impressions, ctrs)
+
+print scoreClickAUC(clicks2, impressions2, ctrs2)
+
+
+binary_click = []
+for click in clicks:
+    if int(click) != 0:
+        binary_click.append(1.0)
+    else:
+        binary_click.append(0.0)
+
+
+print metrics.auc(binary_click, ctrs)
+
+print binary_click
+print ctrs
