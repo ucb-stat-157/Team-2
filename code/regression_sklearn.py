@@ -1,5 +1,4 @@
-from sklearn import tree
-from sklearn import svm
+from sklearn import tree, svm
 import ml_metrics as metrics
 
 instances = [line.strip() for line in open('aggregated_combined_data.txt')]
@@ -10,7 +9,6 @@ values = []
 for instance in instances:
     instance = instance.split('\t')
     # print instance
-
 
     if int(instance[2]) != 0:
         sample = [instance[3], instance[4]]
@@ -56,8 +54,11 @@ print len(values)
 print len(ctrs)
 print len(clicks)
 mse = 0
+
+true_val = []
 for index in range(len(ctrs)):
     actual = float(clicks[index]) / impressions[index]
+    true_val.append(actual)
     mse += (actual - ctrs[index])**2
 
 print mse/len(values)

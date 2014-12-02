@@ -13,6 +13,7 @@ for line in sys.stdin:
     line = line.split('\t', 1)
 
     userid = line[0]
+    # print train_or_tokens
     if current_userid != userid:
         if len(training_lines) > 0 and user_tokens != None:
             for inst in training_lines:
@@ -20,9 +21,9 @@ for line in sys.stdin:
             training_lines = []
             user_tokens = None
 
-        if len(train_or_tokens) == 3:
+        if len(train_or_tokens) == 2:
             user_tokens = line[1]
-        if len(train_or_tokens) == 13:
+        if len(train_or_tokens) == 15:
             training_lines.append(line[1])
 
         current_userid = userid
@@ -30,7 +31,7 @@ for line in sys.stdin:
     else:
         if len(train_or_tokens) == 2:
             user_tokens = line[1]
-        if len(train_or_tokens) == 13:
+        if len(train_or_tokens) == 15:
             training_lines.append(line[1])
 
 for inst in training_lines:

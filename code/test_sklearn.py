@@ -1,5 +1,7 @@
 from sklearn import tree
 from sklearn import svm
+from sklearn.metrics import roc_curve, auc
+
 import ml_metrics as metrics
 
 instances = [line.strip() for line in open('combined_data.txt')]
@@ -13,10 +15,15 @@ for instance in instances:
     sample = [instance[12], instance[13], instance[6]]
     samples.append(sample)
 
+    print "sample"
+    print sample
     if instance[0] != '0':
+        print 1
         values.append(1)
     else:
+        print 0
         values.append(0)
+
 
 clf = tree.DecisionTreeClassifier()
 clf.fit(samples, values)
@@ -138,5 +145,11 @@ for click in clicks:
 
 print metrics.auc(binary_click, ctrs)
 
-print binary_click
-print ctrs
+# print binary_click
+# print ctrs
+
+
+
+fpr, tpr, _ = roc_curve(binary_click, ctrs)
+print "auc"
+print auc(fpr, tpr)
