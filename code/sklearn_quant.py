@@ -1,10 +1,13 @@
-from sklearn import tree
-from sklearn import svm
-from sklearn.metrics import roc_curve, auc
-
+from sklearn import tree, svm
+from sklearn.naive_bayes import BernoulliNB
 import ml_metrics as metrics
+import numpy as np
 
-instances = [line.strip() for line in open('combined_data.txt')]
+from sklearn.cross_validation import cross_val_score
+from sklearn.ensemble import AdaBoostClassifier
+
+# instances = [line.strip() for line in open('aggregated_combined_data.txt')]
+instances = [line.strip() for line in open('aggregated_title_data.txt')]
 
 samples = []
 values = []
@@ -12,83 +15,105 @@ values = []
 for instance in instances:
     instance = instance.split('\t')
     # print instance
-    sample = [instance[12], instance[13], instance[6]]
-    samples.append(sample)
 
-    print "sample"
-    print sample
-    if instance[0] != '0':
-        print 1
-        values.append(1)
-    else:
-        print 0
-        values.append(0)
+    tokens = instance[13]
+    tokens = tokens.split('|')
 
+    samples.append([float(len(tokens))])
 
-clf = tree.DecisionTreeClassifier()
+    if int(instance[2]) != 0:
+    #     sample = [instance[3], instance[4]]
+    #     samples.append(sample)
+        values.append(float(instance[1])/int(instance[2]))
+
+        # if int(instance[1]) != 0:
+        #     values.append(1)
+        # else:
+        #     values.append(0)
+
+clf = tree.DecisionTreeRegressor()
 clf.fit(samples, values)
 
-clf2 = svm.SVC()
-clf2.fit(samples, values)
 
-tests = [line.strip() for line in open('combined_instances.txt')]
+# gnb = BernoulliNB()
+# gnb_predictor = gnb.fit(np.array(samples), np.array(values))
+# print("Number of mislabeled points out of a total %d points : %d" % (iris.data.shape[0],(iris.target != y_pred).sum()))
+
+clf2 = AdaBoostClassifier(n_estimators=100)
+# scores = cross_val_score(clf2, samples, values)
+# print scores.mean()
+print 'derp'
+clf2.fit(samples, values)
+# print samples
+
+
+# tests = [line.strip() for line in open('combined_instances.txt')]
+tests = [line.strip() for line in open('final_title_instance.txt')]
 
 right = 0
 total = 0
-
-right2 = 0
 
 clicks = []
 impressions = []
 depth = []
 ctrs = []
 
-clicks2 = []
-impressions2 = []
-depth2 = []
-ctrs2 = []
-
 for test in tests:
     test = test.split('\t')
 
-    sample = [test[12], test[13], test[6]]
+    # sample = [test[12], test[13]]
+    # clicks.append(int(test[0]))
+    # impressions.append(int(test[1]))
+    # val = clf.predict(sample)
+    # ctrs.append(float(val))
+
+    # ada
+    sample = test[14]
+    sample = len(test[14].split('|'))
     clicks.append(int(test[0]))
     impressions.append(int(test[1]))
-    depth.append(int(test[2]))
-    val = clf.predict(sample)
+    val = clf2.predict(sample)
+    # print "sample213123"
+    # print val
     ctrs.append(float(val))
 
-    clicks2.append(int(test[0]))
-    impressions2.append(int(test[1]))
-    depth2.append(int(test[2]))
-    val2 = clf2.predict(sample)
-    ctrs2.append(float(val))
+    # val2 = gnb_predictor.predict(sample)
+
+    # print val2
+
 
     if int(val[0]) == int(test[0]):
         if int(val[0]) == 1:
             print 'predicted click'
         right += 1
 
-    if int(val2[0]) == int(test[0]):
-        if int(val2[0]) == 1:
-            print 'predicted click'
-        right2 += 1
-    # else:
-    #     print 'predicted'
-    #     print val[0]
-    #     print 'actual'
-    #     print test[0]
     total += 1
 
 print "countz"
 print right
-print right2
-
-
-
 print total
 
-# source: http://www.kddcup2012.org/c/kddcup2012-track2/forums/t/1776/understanding-the-auc
+
+print "mse"
+print len(values)
+print len(ctrs)
+print len(clicks)
+mse = 0
+
+true_val = []
+for index in range(len(ctrs)):
+    actual = float(clicks[index]) / impressions[index]
+    true_val.append(actual)
+    mse += (actual - ctrs[index])**2
+
+print mse/len(values)
+
+
+
+
+
+
+
 def scoreClickAUC(num_clicks, num_impressions, predicted_ctr):
     """
     Calculates the area under the ROC curve (AUC) for click rates
@@ -130,26 +155,5 @@ def scoreClickAUC(num_clicks, num_impressions, predicted_ctr):
     auc = auc_temp / (click_sum * no_click_sum)
     return auc
 
+print 'yolo'
 print scoreClickAUC(clicks, impressions, ctrs)
-
-print scoreClickAUC(clicks2, impressions2, ctrs2)
-
-
-binary_click = []
-for click in clicks:
-    if int(click) != 0:
-        binary_click.append(1.0)
-    else:
-        binary_click.append(0.0)
-
-
-print metrics.auc(binary_click, ctrs)
-
-# print binary_click
-# print ctrs
-
-
-
-fpr, tpr, _ = roc_curve(binary_click, ctrs)
-print "auc"
-print auc(fpr, tpr)
