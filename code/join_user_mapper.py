@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# Mapper
+# Prepend instance lines with user ID
+
 import sys
 
 len_side = 0
