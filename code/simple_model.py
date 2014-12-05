@@ -4,11 +4,11 @@ from math import ceil
 dic = {}
 
 if sys.argv[1] == 'title':
-    filename = 'raymondpls.txt'
+    filename = 'final_title.txt'
 elif sys.argv[1] == 'purchased':
-    filename = 'raymondpls2.txt'
+    filename = 'final_purchased.txt'
 elif sys.argv[1] == 'description':
-    filename = 'raymondpls3.txt'
+    filename = 'final_description.txt'
 else:
     sys.exit()
 
@@ -36,7 +36,6 @@ for key in keys:
     total_clicks += int(clicks)
     total_impressions += int(impressions)
 
-
 predictor = {}
 for key in keys:
     clicks, impressions = dic[key]
@@ -44,18 +43,12 @@ for key in keys:
     impressions = int(impressions)
     c = str(float(clicks) / total_clicks)
     nc = str(float(impressions - clicks) / (total_impressions - total_clicks))
-    print 'lala'
-    print key
-    print c
-    print nc
-
     if c > nc:
         predictor[key] = 1
     else:
         predictor[key] = 0
 
-print predictor
-
+# source: https://github.com/myui/hivemall/blob/master/resources/examples/kddtrack2/scoreKDD.py
 def scoreClickAUC(num_clicks, num_impressions, predicted_ctr):
     """
     Calculates the area under the ROC curve (AUC) for click rates
@@ -99,14 +92,12 @@ def scoreClickAUC(num_clicks, num_impressions, predicted_ctr):
 
 
 answers = []
-clickz = []
-impressionz = []
+actual_clicks = []
+actual_impressions = []
 
 for line in sys.stdin:
     line = line.strip()
     tokens = line.split()
-
-    # sample = float(tokens[3])
 
     sample = tokens[3]
 
@@ -115,45 +106,39 @@ for line in sys.stdin:
     else:
         sample = '0.1'
 
-
-    # print 'wtf'
-    # print sample
-    # if sample != '1.0':
-    #     sample = "{0:.1f}".format(float(tokens[3]) + 0.1)
-    # print sample
-    clickz.append(int(tokens[1]))
-    impressionz.append(int(tokens[2]))
+    actual_clicks.append(int(tokens[1]))
+    actual_impressions.append(int(tokens[2]))
 
     if predictor[sample] == 1:
         answers.append(1)
     else:
         answers.append(0)
 
-print scoreClickAUC(clickz, impressionz, answers)
+print scoreClickAUC(actual_clicks, actual_impressions, answers)
 
 
-tp = 0
-tn = 0
-fp = 0
-fn = 0
+# For calculating true positives, true negatives, false positives, false negatives
 
-total = 0
-for i in range(len(clickz)):
-    if int(clickz[i]) > 0 and answers[i] == 1:
-        tp += 1
-    elif int(clickz[i]) == 0 and answers[i] == 0:
-        tn += 1
-    elif int(clickz[i]) == 0 and answers[i] == 1:
-        fp += 1
-    else:
-        fn += 1
+# tp = 0
+# tn = 0
+# fp = 0
+# fn = 0
 
-    total += 1
+# total = 0
+# for i in range(len(actual_clicks)):
+#     if int(actual_clicks[i]) > 0 and answers[i] == 1:
+#         tp += 1
+#     elif int(actual_clicks[i]) == 0 and answers[i] == 0:
+#         tn += 1
+#     elif int(actual_clicks[i]) == 0 and answers[i] == 1:
+#         fp += 1
+#     else:
+#         fn += 1
 
-print tp
-print tn
-print fp
-print fn
-print total
+#     total += 1
 
-
+# print tp
+# print tn
+# print fp
+# print fn
+# print total
