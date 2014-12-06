@@ -1,5 +1,9 @@
 import sys
 
+# Author: Kevin Shieh
+
+# Combine multiple similarily formatted files into one file
+
 clicks = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 impressions = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 

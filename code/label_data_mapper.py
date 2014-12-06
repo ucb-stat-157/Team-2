@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Author: Kevin Shieh
+
 # Mapper
 # Roughly 0.2 data in validation set, 0.2 in test set, 0.6 in training set
 

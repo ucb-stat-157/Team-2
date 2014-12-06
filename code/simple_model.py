@@ -1,3 +1,10 @@
+# Author: Kevin Shieh
+
+# Trains data using Naive Bayes on the given file type
+# Must receive piped in test file in stdin
+# Predicts test data
+# Calculates AUC
+
 import sys
 from math import ceil
 

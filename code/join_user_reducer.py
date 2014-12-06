@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Author: Kevin Shieh
+
 # Reducer
 # Join on user ID by appending user age and gender to instance lines
 # Assumed that input data is sorted

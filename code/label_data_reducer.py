@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Author: Kevin Shieh
+
 # Reducer
 # Another trivial reducer
 

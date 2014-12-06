@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Author: Kevin Shieh
+
 # Mapper
 # Run through a EMR job to separate validation data into individual directory
 

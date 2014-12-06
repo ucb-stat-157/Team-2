@@ -1,5 +1,7 @@
 ### COMPLETELY NOT IN USE ###
 
+# Author: Kevin Shieh
+
 # Testing using the sklearn package
 # Requires sampled data which I don't have anymore
 

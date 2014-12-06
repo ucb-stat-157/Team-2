@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Author: Kevin Shieh
+
 # Reducer
 # Reduce into corresponding 0.1 width buckets
 

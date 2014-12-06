@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Author: Kevin Shieh
+
 # Reducer
 # Join on feature ID by appending feature tokens to instance lines
 # Assumed that input data is sorted

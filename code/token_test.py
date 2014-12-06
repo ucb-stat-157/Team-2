@@ -1,4 +1,4 @@
-
+# Author: Eileen Li
 
 ### the goal is to calculate how similar an ad's tokens are within itself, between its Keyword, Title, and Description then create groups based on # of shared tokens
 
@@ -20,20 +20,20 @@ def ctr_token_prediction(testfile, trainfile):
 ### first we calculate number of shared tokens for our training data
 
     data = [line.strip() for line in open("instances.txt")]
-    ads = [line.split('\t') for line in data]    
-    
+    ads = [line.split('\t') for line in data]
+
     for line in ads:
-    
+
         query = get_tokens(line[7], 'queryid_tokensid.txt')
         keyword = get_tokens(line[8], 'purchasedkeywordid_tokensid.txt')
         title = get_tokens(line[9], 'titleid_tokensid.txt')
         description = get_tokens(line[10], 'descriptionid_tokensid.txt')
-        
+
         kt = [x for x in keyword if x in title]
         ktd = [x for x in description if x in kt]
 
         ctr = int(line[0])/int(line[1])
-        
+
 ### We also want to calculate the similarity index between the search query and the Ad keywords
 
         count_same = 0
@@ -42,9 +42,9 @@ def ctr_token_prediction(testfile, trainfile):
             if i in all_tokens:
                 count_same += 1
         similarity = float(count_same)/len(query
-        
+
 ### creating the groups
-        
+
         if len(ktd) == 0:
             shared0.append(ctr)
         else if len(ktd) == 1:
@@ -69,7 +69,7 @@ def ctr_token_prediction(testfile, trainfile):
             shared10.append(ctr)
         else if len(ketd) > 10:
             sharedn.append(ctr)
-            
+
 
 ### we calculate the average CTR for each group
     def avg(ctr):
@@ -79,17 +79,17 @@ def ctr_token_prediction(testfile, trainfile):
 
 ### now we calculate the number of shared tokens for our test data
     predicted_ctr = []
-    
+
     test = [line.strip() for line in open("test.txt")]
-    test_ads = [line.split('\t') for line in data]    
-    
+    test_ads = [line.split('\t') for line in data]
+
     for line in test_ads:
-    
+
         query = get_tokens(line[7], 'queryid_tokensid.txt')
         keyword = get_tokens(line[8], 'purchasedkeywordid_tokensid.txt')
         title = get_tokens(line[9], 'titleid_tokensid.txt')
         description = get_tokens(line[10], 'descriptionid_tokensid.txt')
-        
+
         kt = [x for x in keyword if x in title]
         ktd = [x for x in description if x in kt]
 

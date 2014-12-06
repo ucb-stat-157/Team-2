@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Author: Kevin Shieh
+
 # Mapper
 # Maps instance lines to clicks \t impressions \t proportion of
 # query tokens contained in feature tokens

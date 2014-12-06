@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Author: Kevin Shieh
+
 # Reducer
 # Join on queryID by appending query tokens to instance lines
 # Assumed that input data is sorted
